@@ -17,9 +17,7 @@ class SelfBalanceTree<K extends Comparable<K>, V extends Comparable<V>> extends 
     }
 
     private Node<K, V> insert(K key, V value, Node<K, V> subRoot) {
-        Node<K, V> newNode = new Node<K, V>();
-        newNode.key = key;
-        newNode.value = value;
+        Node<K, V> newNode = new Node<K, V>(key, value);
 
         if (subRoot == null) {
             subRoot = newNode;

@@ -10,9 +10,7 @@ class BinaryTree<K extends Comparable<K>, V extends Comparable<V>> implements It
 
 
     protected void insert(K key, V value, K keyRoot, String pos) {
-        Node<K, V> newNode = new Node<K, V>();
-        newNode.key = key;
-        newNode.value = value;
+        Node<K, V> newNode = new Node<K, V>(key, value);
 
         if (root == null) {
             this.root = newNode;

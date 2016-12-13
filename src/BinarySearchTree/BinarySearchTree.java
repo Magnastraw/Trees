@@ -7,9 +7,7 @@ import java.util.*;
 class BinarySearchTree<K extends Comparable<K>, V extends Comparable<V>> extends BinaryTree<K, V> {
 
     protected void insert(K key, V value) {
-        Node<K, V> newNode = new Node<K, V>();
-        newNode.key = key;
-        newNode.value = value;
+        Node<K, V> newNode = new Node<K, V>(key, value);
 
         if (root == null) {
             root = newNode;
