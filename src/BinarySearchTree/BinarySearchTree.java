@@ -4,11 +4,9 @@ package BinarySearchTree;
 import java.util.*;
 
 
-public class BinarySearchTree<K extends Comparable<K>, V extends Comparable<V>> implements Iterable {
-    protected Node<K, V> root;
-    protected ArrayList<Node> listTree = new ArrayList<>();
+class BinarySearchTree<K extends Comparable<K>, V extends Comparable<V>> extends BinaryTree<K, V> {
 
-    public void insert(K key, V value) {
+    protected void insert(K key, V value) {
         Node<K, V> newNode = new Node<K, V>();
         newNode.key = key;
         newNode.value = value;
@@ -39,7 +37,8 @@ public class BinarySearchTree<K extends Comparable<K>, V extends Comparable<V>> 
         }
     }
 
-    public Node<K, V> find(K key) {
+    @Override
+    protected Node<K, V> find(K key) {
         Node<K, V> currentNode = root;
 
         while (currentNode.key.compareTo(key) != 0) {
@@ -55,7 +54,8 @@ public class BinarySearchTree<K extends Comparable<K>, V extends Comparable<V>> 
         return currentNode;
     }
 
-    public Node<K, V> findMin() {
+    @Override
+    protected Node<K, V> findMin() {
         Node<K, V> currentNode = root;
         Node<K, V> lastNode = root;
         while (currentNode != null) {
@@ -65,7 +65,8 @@ public class BinarySearchTree<K extends Comparable<K>, V extends Comparable<V>> 
         return lastNode;
     }
 
-    public Node<K, V> findMax() {
+    @Override
+    protected Node<K, V> findMax() {
         Node<K, V> currentNode = root;
         Node<K, V> lastNode = root;
         while (currentNode != null) {
@@ -92,7 +93,8 @@ public class BinarySearchTree<K extends Comparable<K>, V extends Comparable<V>> 
         return successor;
     }
 
-    public boolean delete(K key) {
+    @Override
+    protected boolean delete(K key) {
         Node<K, V> currentNode = root;
         Node<K, V> parentNode = root;
         boolean isLeftChild = true;
@@ -149,54 +151,4 @@ public class BinarySearchTree<K extends Comparable<K>, V extends Comparable<V>> 
         }
         return true;
     }
-
-    private void inOrder(Node<K, V> root) {
-        if (root != null) {
-            inOrder(root.leftChild);
-
-            System.out.println("Key=" + root.key + " Value=" + root.value);
-            inOrder(root.rightChild);
-        }
-    }
-
-    private void preOrder(Node<K, V> root){
-        if (root != null) {
-            System.out.println("Key=" + root.key + " Value=" + root.value);
-
-            inOrder(root.leftChild);
-            inOrder(root.rightChild);
-        }
-    }
-
-    private void postOrder(Node<K, V> root){
-        if (root != null) {
-            inOrder(root.leftChild);
-            inOrder(root.rightChild);
-
-            System.out.println("Key=" + root.key + " Value=" + root.value);
-        }
-    }
-
-
-    private void across(Node<K, V> root){
-        Queue<Node<K, V>> queue=new LinkedList<>();
-        queue.add(root);
-        while(!queue.isEmpty()){
-            root = queue.poll();
-            listTree.add(root);
-            if (root.leftChild!=null) queue.add(root.leftChild);
-            if (root.rightChild!=null) queue.add(root.rightChild);
-        }
-    }
-
-    public ArrayList<Node> getList() {
-        across(this.root);
-        return listTree;
-    }
-
-    @Override
-    public TreeIterator iterator() {
-        return new TreeIterator(root);
-    }
-
 }

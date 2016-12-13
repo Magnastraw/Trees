@@ -3,7 +3,7 @@ package BinarySearchTree;
 
 
 
-public class Node<K extends Comparable<K>, V extends Comparable<V>> implements Comparable<Node<K, V>> {
+class Node<K extends Comparable<K>, V extends Comparable<V>> implements Comparable<Node<K, V>> {
     K key;
     V value;
     int height;

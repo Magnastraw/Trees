@@ -1,9 +1,7 @@
 package BinarySearchTree;
 
-import java.util.ArrayList;
 
-public class SelfBalanceTree<K extends Comparable<K>, V extends Comparable<V>> extends BinarySearchTree<K, V> {
-
+class SelfBalanceTree<K extends Comparable<K>, V extends Comparable<V>> extends BinarySearchTree<K, V> {
 
     private int max(int lhs, int rhs) {
         return lhs > rhs ? lhs : rhs;
@@ -49,9 +47,6 @@ public class SelfBalanceTree<K extends Comparable<K>, V extends Comparable<V>> e
         return subRoot;
     }
 
-
-     /* Rotate binary tree node with left child */
-
     private Node<K, V> rotateWithLeftChild(Node<K, V> root) {
         Node<K, V> subRoot = root.leftChild;
         root.leftChild = subRoot.rightChild;
@@ -60,10 +55,6 @@ public class SelfBalanceTree<K extends Comparable<K>, V extends Comparable<V>> e
         subRoot.height = max(height(subRoot.leftChild), subRoot.height) + 1;
         return subRoot;
     }
-
-
-
-     /* Rotate binary tree node with right child */
 
     private Node<K, V> rotateWithRightChild(Node<K, V> root) {
         Node<K, V> subRoot = root.rightChild;
@@ -75,22 +66,10 @@ public class SelfBalanceTree<K extends Comparable<K>, V extends Comparable<V>> e
 
     }
 
-    /**
-     * Double rotate binary tree node: first left child
-     * <p>
-     * with its right child; then node k3 with new left child
-     */
-
     private Node<K, V> doubleWithLeftChild(Node<K, V> root) {
         root.leftChild = rotateWithRightChild(root.leftChild);
         return rotateWithLeftChild(root);
     }
-
-    /**
-     * Double rotate binary tree node: first right child
-     * <p>
-     * with its left child; then node k1 with new right child
-     */
 
     private Node<K, V> doubleWithRightChild(Node<K, V> root) {
         root.rightChild = rotateWithLeftChild(root.rightChild);
