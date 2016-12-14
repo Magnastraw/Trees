@@ -74,17 +74,39 @@ class BinarySearchTree<K extends Comparable<K>, V extends Comparable<V>> extends
         return lastNode;
     }
 
-    private Node<K, V> getSuccessor(Node<K, V> delNode){
+    protected Node<K, V> findMax(Node<K, V> subRoot) {
+        if (subRoot == null) {
+            return null;
+        }
+
+        while (subRoot.rightChild != null) {
+            subRoot = subRoot.rightChild;
+        }
+        return subRoot;
+    }
+
+    protected Node<K, V> findMin(Node<K, V> subRoot) {
+        if (subRoot == null)
+            return null;
+
+        while (subRoot.leftChild != null) {
+            subRoot = subRoot.leftChild;
+        }
+        return subRoot;
+    }
+
+
+    private Node<K, V> getSuccessor(Node<K, V> delNode) {
         Node<K, V> successorParent = delNode;
         Node<K, V> successor = delNode;
         Node<K, V> current = delNode.rightChild;
-        while(current!=null){
+        while (current != null) {
             successorParent = successor;
             successor = current;
             current = current.rightChild;
         }
 
-        if(successor.compareTo(delNode.rightChild)!=0){
+        if (successor.compareTo(delNode.rightChild) != 0) {
             successorParent.leftChild = successor.rightChild;
             successor.rightChild = delNode.rightChild;
         }
@@ -128,9 +150,9 @@ class BinarySearchTree<K extends Comparable<K>, V extends Comparable<V>> extends
                 parentNode.rightChild = currentNode.leftChild;
             }
         } else if (currentNode.leftChild == null) {
-            if(currentNode.compareTo(root)==0){
+            if (currentNode.compareTo(root) == 0) {
                 root = currentNode.rightChild;
-            } else if(isLeftChild){
+            } else if (isLeftChild) {
                 parentNode.leftChild = currentNode.rightChild;
             } else {
                 parentNode.rightChild = currentNode.rightChild;
@@ -138,9 +160,9 @@ class BinarySearchTree<K extends Comparable<K>, V extends Comparable<V>> extends
         } else {
             Node<K, V> successor = getSuccessor(currentNode);
 
-            if(currentNode.compareTo(root)==0){
+            if (currentNode.compareTo(root) == 0) {
                 root = successor;
-            } else if(isLeftChild){
+            } else if (isLeftChild) {
                 parentNode.leftChild = successor;
             } else {
                 parentNode.rightChild = successor;

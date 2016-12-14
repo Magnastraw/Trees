@@ -2,7 +2,6 @@
 
 package BinarySearchTree;
 
-
 import java.util.ArrayList;
 
 class Main {
@@ -22,6 +21,7 @@ class Main {
         selfbTree.insert(20, 26.3);
         selfbTree.insert(25, 60.0);
         selfbTree.insert(44, 55.0);
+        selfbTree.insert(17, 33.0);
 
 
         binaryTree.insert("D", 22.1, "", "");
@@ -33,15 +33,22 @@ class Main {
         test(binaryTree);
         test(bsearchTree);
         test(selfbTree);
+        iterator = selfbTree.iterator();
+        while (iterator.hasNext()) {
+            if(iterator.next().key==Integer.valueOf(17)){
+                iterator.remove();
+            }
+        }
+        test(selfbTree);
     }
 
-    public static void test(BinaryTree tree){
+    private static void test(BinaryTree tree) {
         tree.printTree();
-        System.out.println("Min:"+tree.findMin().key);
-        System.out.println("Max:"+tree.findMax().key);
+        System.out.println("Min:" + tree.findMin().key);
+        System.out.println("Max:" + tree.findMax().key);
         System.out.println("------------");
         iterator = tree.iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             System.out.println(iterator.next().key);
         }
         System.out.println("------------");

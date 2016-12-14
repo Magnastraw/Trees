@@ -6,12 +6,12 @@ import java.util.Iterator;
 import java.util.Stack;
 
 
-class TreeIterator implements Iterator {
-    private Stack<Node> stack;
-    private Node resultNode;
+class TreeIterator<K extends Comparable<K>, V extends Comparable<V>> implements Iterator {
+    private Stack<Node<K, V>> stack;
+    protected Node<K, V> resultNode;
 
-    public TreeIterator(Node root) {
-        stack = new Stack<Node>();
+    TreeIterator(Node<K, V> root) {
+        stack = new Stack<Node<K, V>>();
         while (root != null) {
             stack.push(root);
             root = root.leftChild;
@@ -24,9 +24,9 @@ class TreeIterator implements Iterator {
     }
 
     @Override
-    public Node next() {
+    public Node<K, V> next() {
         this.resultNode = stack.pop();
-        Node node = resultNode;
+        Node<K, V> node = resultNode;
         if (node.rightChild != null) {
             node = node.rightChild;
             while (node != null) {

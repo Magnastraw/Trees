@@ -35,7 +35,6 @@ class BinaryTree<K extends Comparable<K>, V extends Comparable<V>> implements It
         Node<K, V> tempNode;
         boolean isLeftChild = true;
 
-
         Queue<Node<K, V>> queue = new LinkedList<>();
         queue.add(root);
         while (!queue.isEmpty()) {
@@ -165,7 +164,12 @@ class BinaryTree<K extends Comparable<K>, V extends Comparable<V>> implements It
     }
 
     @Override
-    public TreeIterator iterator() {
-        return new TreeIterator(root);
+    public TreeIterator<K, V> iterator() {
+        return new TreeIterator<K, V>(root){
+            @Override
+            public void remove() {
+                delete(this.resultNode.key);
+            }
+        };
     }
 }

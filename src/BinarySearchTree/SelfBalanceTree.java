@@ -27,7 +27,7 @@ class SelfBalanceTree<K extends Comparable<K>, V extends Comparable<V>> extends 
                 if (key.compareTo(subRoot.leftChild.key) < 0) {
                     subRoot = rotateWithLeftChild(subRoot);
                 } else {
-                    subRoot = doubleWithRightChild(subRoot);
+                    subRoot = doubleWithLeftChild(subRoot);
                 }
             }
         } else if (key.compareTo(subRoot.key) > 0) {
@@ -36,7 +36,7 @@ class SelfBalanceTree<K extends Comparable<K>, V extends Comparable<V>> extends 
                 if (key.compareTo(subRoot.rightChild.key) > 0) {
                     subRoot = rotateWithRightChild(subRoot);
                 } else {
-                    subRoot = doubleWithLeftChild(subRoot);
+                    subRoot = doubleWithRightChild(subRoot);
                 }
             }
         }
@@ -50,7 +50,7 @@ class SelfBalanceTree<K extends Comparable<K>, V extends Comparable<V>> extends 
         root.leftChild = subRoot.rightChild;
         subRoot.rightChild = root;
         root.height = max(height(root.leftChild), height(root.rightChild)) + 1;
-        subRoot.height = max(height(subRoot.leftChild), subRoot.height) + 1;
+        subRoot.height = max(height(subRoot.leftChild), root.height) + 1;
         return subRoot;
     }
 
@@ -71,57 +71,64 @@ class SelfBalanceTree<K extends Comparable<K>, V extends Comparable<V>> extends 
 
     private Node<K, V> doubleWithRightChild(Node<K, V> root) {
         root.rightChild = rotateWithLeftChild(root.rightChild);
-        return rotateWithRightChild(root.rightChild);
-    }
-
-
-    private Node delete(K key, Node<K, V> node) {
-      /*  if (node == null) return null;
-        int compareResult = key.compareTo(node.key);
-        if (compareResult > 0) {
-            node.rightChild = delete(key, node.rightChild);
-        } else if (compareResult < 0) {
-            node.leftChild = delete(key, node.leftChild);
-        } else {
-            if (node.rightChild == null && node.leftChild == null) {
-                node = null;
-            } else if (node.rightChild == null) {
-                node.leftChild.father = node.father;
-                node = node.left;
-            } else if (node.left == null) {
-                node.right.father = node.father;
-                node = node.right;
-            } else {
-                if (node.right.left == null) {
-                    node.right.left = node.left;
-                    node.right.father = node.father;
-                    node.right.father = node.father;
-                    node.left.father = node.right;
-                    node = node.right;
-                } else {
-                    Node res = min(node.right);
-                    node.key = res.key;
-                    node.value = res.value;
-                    delete(node.right, node.key);
-                }
-            }
-        }
-        if (node != null) {
-            node.h = height(node.left, node.right) + 1;
-            node.balance = balance(node.left, node.right);
-            if (node.balance == -2) {
-                node = leftRotation(node);
-            } else if (node.balance == 2) {
-                node = rightRotation(node);
-            }
-        }*/
-        return node;
+        return rotateWithRightChild(root);
     }
 
     @Override
-    public boolean delete(K key) {
-        root = delete(key, root);
+    protected boolean delete(K key) {
+        root = remove(key, root);
         return true;
+    }
+
+    private Node<K, V> remove(K key, Node<K, V> node) {
+
+        if (key.compareTo(node.key) < 0) {
+            node.leftChild = remove(key, node.leftChild);
+            int l = node.leftChild != null ? node.leftChild.height : 0;
+
+            if ((node.rightChild != null) && (node.rightChild.height - l >= 2)) {
+                int rightHeight = node.rightChild.rightChild != null ? node.rightChild.rightChild.height : 0;
+                int leftHeight = node.rightChild.leftChild != null ? node.rightChild.leftChild.height : 0;
+
+                if (rightHeight >= leftHeight)
+                    node = rotateWithLeftChild(node);
+                else
+                    node = doubleWithRightChild(node);
+            }
+        } else if (key.compareTo(node.key) > 0) {
+            node.rightChild = remove(key, node.rightChild);
+            int r = node.rightChild != null ? node.rightChild.height : 0;
+            if ((node.leftChild != null) && (node.leftChild.height - r >= 2)) {
+                int leftHeight = node.leftChild.leftChild != null ? node.leftChild.leftChild.height : 0;
+                int rightHeight = node.leftChild.rightChild != null ? node.leftChild.rightChild.height : 0;
+                if (leftHeight >= rightHeight)
+                    node = rotateWithRightChild(node);
+                else
+                    node = doubleWithLeftChild(node);
+            }
+        } else if (node.leftChild != null) {
+            node.key = findMax(node.leftChild).key;
+            remove(node.key, node.leftChild);
+
+            if ((node.rightChild != null) && (node.rightChild.height - node.leftChild.height >= 2)) {
+                int rightHeight = node.rightChild.rightChild != null ? node.rightChild.rightChild.height : 0;
+                int leftHeight = node.rightChild.leftChild != null ? node.rightChild.leftChild.height : 0;
+
+                if (rightHeight >= leftHeight)
+                    node = rotateWithLeftChild(node);
+                else
+                    node = doubleWithRightChild(node);
+            }
+        } else {
+            node = (node.leftChild != null) ? node.leftChild : node.rightChild;
+        }
+
+        if (node != null) {
+            int leftHeight = node.leftChild != null ? node.leftChild.height : 0;
+            int rightHeight = node.rightChild != null ? node.rightChild.height : 0;
+            node.height = Math.max(leftHeight, rightHeight) + 1;
+        }
+        return node;
     }
 }
 
